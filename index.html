@@ -3,109 +3,435 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>بوت موسوعي — مليون رد ذكي</title>
+  <title>YASSER BOT — مليون رد ذكي</title>
   <meta name="theme-color" content="#0ea5e9">
   <style>
-    body{margin:0;font-family:system-ui,"Noto Sans Arabic",sans-serif;background:#0f172a;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh}
-    .chat{width:min(800px,95vw);background:rgba(255,255,255,0.05);border-radius:16px;padding:16px;display:flex;flex-direction:column;height:90vh}
-    .messages{flex:1;overflow:auto;margin-bottom:12px;padding:10px}
-    .bubble{padding:12px;margin:6px 0;border-radius:10px;max-width:80%;white-space:pre-wrap}
-    .user{background:#2563eb;align-self:flex-end}
-    .bot{background:#1f2937;align-self:flex-start}
-    .composer{display:flex;gap:8px}
-    textarea{flex:1;padding:10px;border-radius:10px;border:none;resize:none}
-    button{padding:10px 14px;border:none;border-radius:10px;background:#0ea5e9;color:#fff;font-weight:700;cursor:pointer}
-    .code{margin-top:10px;padding:10px;border-radius:10px;background:#111827;font-family:ui-monospace,Menlo,Consolas,monospace;overflow:auto}
+    :root{
+      --bg:#0b1220; --panel:#0f172a; --text:#e5e7eb; --muted:#94a3b8;
+      --primary:#0ea5e9; --accent:#22d3ee; --user:#2563eb; --bot:#1f2937;
+      --glass:rgba(255,255,255,0.06); --glassBorder:rgba(255,255,255,0.12);
+    }
+    /* وضع أصفر زجاجي أنيق */
+    :root.theme-yellow{
+      --bg:#0a0a06; --panel:#14140a; --text:#fffbe6; --muted:#f7e8a1;
+      --primary:#f5c518; --accent:#ffd65b; --user:#f5c518; --bot:#2a240f;
+      --glass:rgba(245,197,24,0.10); --glassBorder:rgba(245,197,24,0.25);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui,"Noto Sans Arabic",Segoe UI,Roboto,sans-serif;
+      background:linear-gradient(160deg,var(--bg),var(--panel)); color:var(--text);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .app{
+      width:min(1200px,96vw); height:min(92vh,920px);
+      display:grid; grid-template-columns:360px 1fr; gap:14px;
+      padding:18px; border-radius:18px;
+      background:linear-gradient(180deg, var(--glass), rgba(255,255,255,0.03));
+      border:1px solid var(--glassBorder);
+      backdrop-filter:blur(12px) saturate(1.1);
+      box-shadow:0 25px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .sidebar, .main{
+      background:var(--glass); border:1px solid var(--glassBorder);
+      border-radius:16px;
+    }
+    .sidebar{padding:14px; display:flex; flex-direction:column; gap:12px; overflow:auto}
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{
+      width:44px; height:44px; border-radius:12px;
+      background:conic-gradient(from 210deg,var(--primary),var(--accent),#6366f1,var(--primary));
+      box-shadow:0 6px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+    .title{font-weight:800; letter-spacing:.2px}
+    .muted{color:var(--muted); font-size:.92rem}
+    .controls{display:flex; gap:8px; flex-wrap:wrap}
+    .btn{
+      appearance:none; border:1px solid var(--glassBorder); outline:none; cursor:pointer;
+      padding:10px 12px; border-radius:10px; font-weight:700; color:white;
+      background:linear-gradient(180deg,var(--primary),#2563eb);
+      transition:transform .12s ease, filter .2s ease;
+    }
+    .btn:hover{transform:translateY(-1px); filter:saturate(1.06)}
+    .btn.secondary{background:linear-gradient(180deg,#1f2937,var(--panel))}
+    .select,.input{
+      width:100%; background:rgba(2,6,23,0.45); color:var(--text);
+      border:1px solid var(--glassBorder); border-radius:10px; padding:10px;
+      backdrop-filter:blur(6px);
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px;
+      background:rgba(34,197,94,0.12); color:#a7f3d0; border:1px dashed rgba(34,197,94,0.35); font-weight:700;
+    }
+    .badge.warn{background:rgba(245,158,11,0.12); color:#fde68a; border-color:rgba(245,158,11,0.35)}
+    .modeRow{display:flex; gap:8px; flex-wrap:wrap}
+    .main{display:flex; flex-direction:column}
+    .messages{flex:1; overflow:auto; padding:16px}
+    .bubble{
+      max-width:72%; margin:6px 0; padding:12px; border-radius:12px; white-space:pre-wrap;
+      background:rgba(255,255,255,0.08); border:1px solid var(--glassBorder);
+      box-shadow:0 8px 24px rgba(0,0,0,0.25);
+    }
+    .bubble.user{background:linear-gradient(180deg,var(--user),#1e40af); margin-left:auto}
+    .bubble.bot{background:linear-gradient(180deg,var(--bot),#111827); margin-right:auto}
+    .composer{
+      display:flex; gap:10px; padding:12px; border-top:1px solid var(--glassBorder);
+      background:linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.25)); backdrop-filter:blur(6px);
+    }
+    textarea{
+      flex:1; resize:none; min-height:48px; max-height:180px; padding:10px;
+      border-radius:10px; border:1px solid var(--glassBorder);
+      background:rgba(2,6,23,0.45); color:var(--text);
+    }
+    .code{
+      margin-top:10px; padding:10px; border-radius:10px;
+      background:rgba(2,6,23,0.6); border:1px solid var(--glassBorder);
+      font-family:ui-monospace,Menlo,Consolas,monospace; overflow:auto;
+    }
+    .small{font-size:.92rem}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(96,165,250,0.12);color:#bfdbfe;border:1px dashed rgba(96,165,250,0.35);font-weight:700}
   </style>
 </head>
 <body>
-  <div class="chat">
-    <div class="messages" id="messages"></div>
-    <div class="composer">
-      <textarea id="input" placeholder="اكتب سؤالك هنا..."></textarea>
-      <button id="sendBtn">إرسال</button>
-    </div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div class="title">YASSER BOT — مليون رد ذكي</div>
+          <div class="muted">واجهة زجاجية أنيقة + PWA + ردود لكل المجالات</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="installBtn" class="btn">تثبيت التطبيق</button>
+        <button id="downloadBtn" class="btn secondary">تنزيل الصفحة</button>
+      </div>
+
+      <label class="small">المجال الأساسي</label>
+      <select id="domainSelect" class="select">
+        <option value="">تلقائي</option>
+        <option>برمجة</option>
+        <option>تشفير</option>
+        <option>شبكات</option>
+        <option>قواعد بيانات</option>
+        <option>ذكاء اصطناعي</option>
+        <option>هندسة برمجيات</option>
+        <option>أمن معلومات</option>
+        <option>سحابة</option>
+        <option>أنظمة</option>
+        <option>واجهات وتجربة المستخدم</option>
+        <option>هزار</option>
+        <option>اختراق</option>
+      </select>
+
+      <label class="small">أسلوب الرد</label>
+      <select id="styleSelect" class="select">
+        <option value="مختصر">مختصر</option>
+        <option value="مفصل">مفصل</option>
+        <option value="تقني">تقني</option>
+        <option value="تعليمي">تعليمي</option>
+        <option value="قائمة نقاط">قائمة نقاط</option>
+      </select>
+
+      <label class="small">إضافة أكواد برمجية</label>
+      <select id="codeSelect" class="select">
+        <option value="لا">لا</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="Python">Python</option>
+        <option value="C#">C#</option>
+        <option value="SQL">SQL</option>
+        <option value="Shell">Shell</option>
+      </select>
+
+      <div class="modeRow">
+        <span class="pill">تبديل الوضع</span>
+        <button id="modeDarkBtn" class="btn">الوضع الليلي</button>
+        <button id="modeYellowBtn" class="btn secondary">الوضع الأصفر الزجاجي</button>
+      </div>
+
+      <div class="badge" id="capBadge">فضاء توليد: ~1,000,000 رد ممكن</div>
+      <div class="badge warn" id="countBadge">الجلسة الحالية: 0 رد</div>
+
+      <div class="muted small">
+        ملاحظة: الردود الخاصة بـ "الاختراق" ستكون عامة وتوعوية وغير تعليمات فعلية. الهدف هو الأمان والمسؤولية.
+      </div>
+    </aside>
+
+    <main class="main">
+      <div id="messages" class="messages"></div>
+      <div class="composer">
+        <textarea id="input" placeholder="اكتب سؤالك هنا..."></textarea>
+        <button id="sendBtn" class="btn">إرسال</button>
+      </div>
+    </main>
   </div>
 
 <script>
 (function(){
-  const messagesEl=document.getElementById('messages');
-  const inputEl=document.getElementById('input');
-  const sendBtn=document.getElementById('sendBtn');
+  const messagesEl = document.getElementById('messages');
+  const inputEl = document.getElementById('input');
+  const sendBtn = document.getElementById('sendBtn');
+  const countBadge = document.getElementById('countBadge');
+  const domainSelect = document.getElementById('domainSelect');
+  const styleSelect = document.getElementById('styleSelect');
+  const codeSelect = document.getElementById('codeSelect');
+  const installBtn = document.getElementById('installBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const modeDarkBtn = document.getElementById('modeDarkBtn');
+  const modeYellowBtn = document.getElementById('modeYellowBtn');
 
-  let sessionCount=0;
+  let sessionCount = 0;
+  let deferredPrompt = null;
 
-  // قوالب توليد الردود
-  const intros=["ملخص سريع: ","فكرة أساسية: ","تمهيد: "];
-  const closers=["خلاصة: ركّز على البساطة.","خلاصة: أَمِّن البيانات.","خلاصة: اختبر دائمًا."];
+  // مجالات وكلمات مفتاحية
+  const DOMAINS = {
+    "برمجة": ["JavaScript","Python","C#","Rust","Go","OOP","FP","Patterns","Testing","PWA"],
+    "تشفير": ["AES-GCM","ChaCha20-Poly1305","RSA","ECC","Ed25519","SHA-256","Argon2","HKDF","Nonce","TLS"],
+    "شبكات": ["TCP","UDP","HTTP/2","HTTP/3","QUIC","DNS","CDN","Proxy","Load Balancer","Socket"],
+    "قواعد بيانات": ["PostgreSQL","MySQL","MongoDB","Index","ACID","Transactions","Sharding","Replication","Query Plan","Cache"],
+    "ذكاء اصطناعي": ["CNN","RNN","Transformer","Attention","Embeddings","RL","Prompt","Fine-tune","Inference","Latency"],
+    "هندسة برمجيات": ["SOLID","Clean Architecture","DDD","CQRS","Microservices","Monolith","Refactor","Review","DevOps","CI/CD"],
+    "أمن معلومات": ["Threat Model","Zero Trust","WAF","IAM","SSO","Least Privilege","Audit","Key Rotation","Secrets","Encryption"],
+    "سحابة": ["AWS","Azure","GCP","Kubernetes","Docker","Serverless","Lambda","API Gateway","S3","Blob"],
+    "أنظمة": ["Linux","Windows","Syscall","Process","Thread","Memory","Filesystem","I/O","Kernel","Scheduling"],
+    "واجهات وتجربة المستخدم": ["Accessibility","Design System","Typography","Animations","Dark Mode","Color Contrast","Fitts","Hick","Usability","A/B"],
+    "هزار": ["نكتة لطيفة","لعب كلمات","موقف طريف","خفّة ظل","مزحة تقنية"],
+    "اختراق": ["مسؤولية","توعية","حماية","قواعد أخلاقية","اختبار اختراق قانوني"]
+  };
 
-  // توليد رد غني
-  function composeReply(q){
-    const intro=intros[Math.floor(Math.random()*intros.length)];
-    const closer=closers[Math.floor(Math.random()*closers.length)];
-    const text=`${intro} إجابة عن: ${q}\n- تفاصيل تقنية\n- أفضل الممارسات\n${closer}`;
-    const code=`// مثال JavaScript\nfunction demo(){console.log("سؤالك:", "${q}");}`;
-    const id=sessionCount+1;
-    return {header:`رد #${id}`,text,code};
+  const TEMPLATES = {
+    intro: ["ملخص سريع: ","تمهيد: ","فكرة أساسية: ","إطار الفهم: ","الصورة الكبيرة: "],
+    details: ["التفاصيل التقنية","الجوانب العملية","أفضل الممارسات","تحذيرات شائعة","أداء وقيود"],
+    bullets: ["• ","– ","* "],
+    closers: [
+      "خلاصة: ركّز على البساطة والاختبار المتكرر.",
+      "خلاصة: قِس الأداء مبكرًا وتجنب التعقيد غير الضروري.",
+      "خلاصة: أَمِّن البيانات وافصل الصلاحيات بصرامة.",
+      "خلاصة: وثّق القرارات وراقب الإنتاج جيدًا."
+    ]
+  };
+
+  function makeCodeSnippet(topic, lang){
+    const s = {
+      "JavaScript": `// ${topic} — مثال JavaScript
+async function example(){
+  const encoder = new TextEncoder();
+  const data = encoder.encode("hello");
+  console.log("len:", data.length);
+}`,
+      "Python": `# ${topic} — مثال Python
+def example():
+    data = "hello".encode("utf-8")
+    print("len:", len(data))
+example()`,
+      "C#": `// ${topic} — مثال C#
+using System;
+class Demo {
+  static void Main(){
+    var data = System.Text.Encoding.UTF8.GetBytes("hello");
+    Console.WriteLine("len: " + data.Length);
+  }
+}`,
+      "SQL": `-- ${topic} — مثال SQL
+SELECT name, score
+FROM users
+WHERE score > 90
+ORDER BY score DESC;`,
+      "Shell": `# ${topic} — مثال Shell
+text="hello"
+echo "${#text}"`
+    };
+    return s[lang] || "";
   }
 
-  // إضافة فقاعة
-  function addBubble(text,cls,code){
-    const div=document.createElement('div');
-    div.className=`bubble ${cls}`;
-    div.textContent=text;
+  function detectDomainAndTopic(qText){
+    const lower = qText.toLowerCase();
+    const manual = domainSelect.value || "";
+    if(manual){
+      const topics = DOMAINS[manual];
+      for(const t of topics){ if(lower.includes(t.toLowerCase())) return { domain: manual, topic: t }; }
+      return { domain: manual, topic: topics[0] };
+    }
+    for(const d in DOMAINS){
+      for(const t of DOMAINS[d]){
+        if(lower.includes(t.toLowerCase())) return { domain: d, topic: t };
+      }
+    }
+    return { domain: "برمجة", topic: "Patterns" };
+  }
+
+  function isSensitive(domain, qText){
+    const lower = qText.toLowerCase();
+    if(domain === "اختراق"){
+      // أي طلب يتضمن تعليمات عملية للاختراق أو تجاوزات يعتبر حساس
+      const badHints = ["اختراق","تهكير","باي باس","تجاوز","ثغرة","exploit","ddos","sql injection","xss","كراك","كسر حماية"];
+      return badHints.some(k=>lower.includes(k));
+    }
+    return false;
+  }
+
+  function composeRichReply(question){
+    const { domain, topic } = detectDomainAndTopic(question);
+    const style = styleSelect.value;
+    const codeLang = codeSelect.value;
+    const intro = TEMPLATES.intro[Math.floor(Math.random()*TEMPLATES.intro.length)];
+    const detailKind = TEMPLATES.details[Math.floor(Math.random()*TEMPLATES.details.length)];
+    const bullet = TEMPLATES.bullets[Math.floor(Math.random()*TEMPLATES.bullets.length)];
+    const closer = TEMPLATES.closers[Math.floor(Math.random()*TEMPLATES.closers.length)];
+
+    if(isSensitive(domain, question)){
+      // رد توعوي آمن غير إجرائي
+      const safe = `${intro} المجال: ${domain}. الأمان أولاً: أي معرفة حول الاختراق يجب أن تكون ضمن اختبار اختراق قانوني وبموافقة مكتوبة. 
+${bullet} ركّز على نماذج التهديد وحلول الحماية (WAF, IAM, Least Privilege).
+${bullet} حسّن المراقبة، سجلات التدقيق، والدفاعات متعددة الطبقات.
+${bullet} استخدم منصات تدريب قانونية وتوعوية بدلاً من أي خطوات عملية.
+${closer}`;
+      const id = fingerprint(question, domain, topic, style, codeLang, intro, detailKind, bullet, closer);
+      return { header:`رد #${id} — مجال: ${domain} | موضوع: ${topic} | أسلوب: ${style}`, text: safe, code: "" };
+    }
+
+    // فقرات
+    const paragraphA = `${intro}${domain} — الموضوع: ${topic}. هذا الرد يوازن بين المفهوم والتطبيق العملي بصورة قابلة للتنفيذ.`;
+    const paragraphB = `${detailKind}: حدّد الهدف والقيود، اختر الأدوات والأنماط المناسبة، جرّب بسرعة، قِس النتائج، وحسّن تدريجيًا.`;
+
+    const points = [
+      `${bullet} لماذا ${topic}؟ لمعالجة مشكلة محددة بكفاءة ضمن سياق واضح.`,
+      `${bullet} خطوات: حدّد المدخلات، اعزل التعقيد، اختبر الحدود، راقب الأداء.`,
+      `${bullet} أخطاء شائعة: تجاهل التوثيق، ضعف إدارة الأسرار، تعقيد مبالغ فيه.`,
+      `${bullet} تكامل: اربط ${topic} مع طبقات الخدمة، التخزين المؤقت، والمراقبة.`
+    ];
+
+    let body = "";
+    if(style === "مختصر"){
+      body = `${paragraphA}\n${closer}`;
+    } else if(style === "مفصل" || style === "تعليمي"){
+      body = `${paragraphA}\n${paragraphB}\n${points.join("\n")}\n${closer}`;
+    } else if(style === "تقني"){
+      body = `${paragraphA}\n${paragraphB}\n${points.slice(0,3).join("\n")}\n${closer}`;
+    } else { // قائمة نقاط
+      body = `${paragraphA}\n${points.join("\n")}\n${closer}`;
+    }
+
+    // هزار: رد لطيف بدون إساءة
+    if(domain === "هزار"){
+      body = `${intro} خفّة ظل تقنية: 
+${bullet} لما السيرفر يقولك "Internal Error"، هو بس محتاج شوية قهوة ☕
+${bullet} وDeveloper لما الـ build ينجح من أول مرة: يتأكد إن ده مش Simulation 😅
+${closer}`;
+    }
+
+    const codeBlock = codeLang !== "لا" ? makeCodeSnippet(topic, codeLang) : "";
+    const id = fingerprint(question, domain, topic, style, codeLang, intro, detailKind, bullet, closer);
+    return { header:`رد #${id} — مجال: ${domain} | موضوع: ${topic} | أسلوب: ${style}${codeBlock?" | كود: "+codeLang:""}`, text: body, code: codeBlock };
+  }
+
+  function fingerprint(...parts){
+    let s = parts.join("|");
+    let h = 2166136261 >>> 0;
+    for(let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return (h % 1000000);
+  }
+
+  function addBubble(text, cls, code){
+    const div = document.createElement('div');
+    div.className = `bubble ${cls}`;
+    div.textContent = text;
     if(code){
-      const pre=document.createElement('pre');
-      pre.className='code';
-      pre.textContent=code;
+      const pre = document.createElement('pre');
+      pre.className = 'code';
+      pre.textContent = code;
       div.appendChild(pre);
     }
     messagesEl.appendChild(div);
-    messagesEl.scrollTop=messagesEl.scrollHeight;
+    messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  // إرسال رسالة
   function sendMessage(){
-    const q=(inputEl.value||"").trim();
+    const q = (inputEl.value || "").trim();
     if(!q) return;
-    addBubble(q,'user');
-    inputEl.value="";
+    addBubble(q, 'user');
+    inputEl.value = "";
     setTimeout(()=>{
-      const r=composeReply(q);
-      addBubble(`${r.header}\n\n${r.text}`,'bot',r.code);
+      const r = composeRichReply(q);
+      addBubble(`${r.header}\n\n${r.text}`, 'bot', r.code);
       sessionCount++;
-    },300);
+      countBadge.textContent = `الجلسة الحالية: ${sessionCount} رد`;
+    }, 250);
   }
 
-  sendBtn.addEventListener('click',sendMessage);
-  inputEl.addEventListener('keydown',e=>{
-    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
+  sendBtn.addEventListener('click', sendMessage);
+  inputEl.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
   });
 
-  // Manifest + Service Worker
+  // تبديل الوضع
+  modeDarkBtn.addEventListener('click', ()=>{
+    document.documentElement.classList.remove('theme-yellow');
+  });
+  modeYellowBtn.addEventListener('click', ()=>{
+    document.documentElement.classList.add('theme-yellow');
+  });
+
+  // تنزيل الصفحة الحالية
+  downloadBtn.addEventListener('click', ()=>{
+    const html = document.documentElement.outerHTML;
+    const blob = new Blob([html], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'YASSER-BOT.html';
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  });
+
+  // PWA: تثبيت التطبيق
+  window.addEventListener('beforeinstallprompt', (e)=>{
+    e.preventDefault(); deferredPrompt = e; installBtn.style.display='inline-block';
+  });
+  installBtn.addEventListener('click', async ()=>{
+    if(deferredPrompt){ deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; }
+    else alert('استخدم زر التثبيت من المتصفح إن لم يظهر الحوار.');
+  });
+
+  // أيقونة ديناميكية + Manifest + SW (تقدر تستبدلها بأيقونتك)
   async function createIcon(size){
-    const c=document.createElement('canvas');c.width=size;c.height=size;
+    const c=document.createElement('canvas'); c.width=size; c.height=size;
     const ctx=c.getContext('2d');
-    ctx.fillStyle="#0ea5e9";ctx.fillRect(0,0,size,size);
-    ctx.fillStyle="#fff";ctx.font=`${size*0.3}px sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";
-    ctx.fillText("BOT",size/2,size/2);
-    const b=await new Promise(res=>c.toBlob(res,'image/png'));return URL.createObjectURL(b);
+    const g=ctx.createLinearGradient(0,0,size,size); g.addColorStop(0, getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#0ea5e9'); g.addColorStop(1,'#6366f1');
+    ctx.fillStyle=g; ctx.fillRect(0,0,size,size);
+    ctx.fillStyle='#fff'; ctx.font=`${Math.floor(size*0.26)}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('YASSER', size/2, size/2);
+    const b=await new Promise(res=>c.toBlob(res,'image/png')); return URL.createObjectURL(b);
   }
   async function setupManifest(){
-    const i192=await createIcon(192);const i512=await createIcon(512);
-    const m={name:"Smart Bot 1M Replies",short_name:"Bot1M",start_url:"./",display:"standalone",background_color:"#0f172a",theme_color:"#0ea5e9",icons:[{src:i192,sizes:"192x192",type:"image/png"},{src:i512,sizes:"512x512",type:"image/png"}]};
-    const blob=new Blob([JSON.stringify(m)],{type:'application/json'});
+    const icon192=await createIcon(192); const icon512=await createIcon(512);
+    const manifest={name:"YASSER BOT — 1M Replies",short_name:"YASSER BOT",start_url:"./",display:"standalone",background_color:"#0f172a",theme_color:"#0ea5e9",icons:[{src:icon192,sizes:"192x192",type:"image/png"},{src:icon512,sizes:"512x512",type:"image/png"}]};
+    const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
     const url=URL.createObjectURL(blob);
-    const link=document.createElement('link');link.rel='manifest';link.href=url;document.head.appendChild(link);
+    const link=document.createElement('link'); link.rel='manifest'; link.href=url; document.head.appendChild(link);
   }
   async function setupSW(){
     if(!('serviceWorker' in navigator)) return;
-    const sw=`const C='bot1m-v1';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['./'])));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==C).map(k=>caches.delete(k)))));self.clients.claim();});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{const copy=res.clone();caches.open(C).then(c=>c.put(e.request,copy));return res;})));});`;
+    const sw = `
+      const CACHE='yasser-bot-onefile-v1';
+      self.addEventListener('install',e=>{ e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./']))); self.skipWaiting(); });
+      self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))); self.clients.claim(); });
+      self.addEventListener('fetch',e=>{
+        e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{
+          const copy=res.clone(); caches.open(CACHE).then(c=>c.put(e.request,copy)); return res;
+        })));
+      });
+    `;
     const blob=new Blob([sw],{type:'application/javascript'});
     const url=URL.createObjectURL(blob);
     navigator.serviceWorker.register(url,{scope:'./'});
   }
-  (async function boot(){await setupManifest();await setupSW();})();
+
+  (async function boot(){
+    await setupManifest();
+    await setupSW();
+    addBubble("مرحبًا! أنا YASSER BOT. اسألني في أي مجال، واختر الوضع اللي يعجبك من الشريط الجانبي ✨", "bot");
+  })();
 })();
 </script>
 </body>
