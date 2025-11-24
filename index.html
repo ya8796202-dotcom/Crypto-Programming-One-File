@@ -1,208 +1,213 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>YASSER BOT — مليون رد ذكي</title>
-  <meta name="theme-color" content="#0ea5e9" />
-  <style>
-    :root{
-      --bg:#0b1220; --panel:#0f172a; --text:#e5e7eb; --muted:#94a3b8;
-      --primary:#0ea5e9; --accent:#22d3ee; --user:#2563eb; --bot:#1f2937;
-      --glass:rgba(255,255,255,0.06); --glassBorder:rgba(255,255,255,0.12);
-    }
-    :root.theme-yellow{
-      --bg:#0a0a06; --panel:#14140a; --text:#fffbe6; --muted:#f7e8a1;
-      --primary:#f5c518; --accent:#ffd65b; --user:#f5c518; --bot:#2a240f;
-      --glass:rgba(245,197,24,0.10); --glassBorder:rgba(245,197,24,0.25);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:system-ui,"Noto Sans Arabic",Segoe UI,Roboto,sans-serif;
-      background:linear-gradient(160deg,var(--bg),var(--panel)); color:var(--text);
-      display:flex; align-items:center; justify-content:center;
-    }
-    .app{
-      width:min(1200px,96vw); height:min(92vh,920px);
-      display:grid; grid-template-columns:360px 1fr; gap:14px;
-      padding:18px; border-radius:18px;
-      background:linear-gradient(180deg, var(--glass), rgba(255,255,255,0.03));
-      border:1px solid var(--glassBorder);
-      backdrop-filter:blur(12px) saturate(1.1);
-      box-shadow:0 25px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.07);
-    }
-    .sidebar, .main{
-      background:var(--glass); border:1px solid var(--glassBorder);
-      border-radius:16px;
-    }
-    .sidebar{padding:14px; display:flex; flex-direction:column; gap:12px; overflow:auto}
-    .brand{display:flex; align-items:center; gap:12px}
-    .logo{
-      width:44px; height:44px; border-radius:12px;
-      background:conic-gradient(from 210deg,var(--primary),var(--accent),#6366f1,var(--primary));
-      box-shadow:0 6px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.35);
-    }
-    .title{font-weight:800; letter-spacing:.2px}
-    .muted{color:var(--muted); font-size:.92rem}
-    .controls{display:flex; gap:8px; flex-wrap:wrap}
-    .btn{
-      appearance:none; border:1px solid var(--glassBorder); outline:none; cursor:pointer;
-      padding:10px 12px; border-radius:10px; font-weight:700; color:white;
-      background:linear-gradient(180deg,var(--primary),#2563eb);
-      transition:transform .12s ease, filter .2s ease;
-    }
-    .btn:hover{transform:translateY(-1px); filter:saturate(1.06)}
-    .btn.secondary{background:linear-gradient(180deg,#1f2937,var(--panel))}
-    .select,.input{
-      width:100%; background:rgba(2,6,23,0.45); color:var(--text);
-      border:1px solid var(--glassBorder); border-radius:10px; padding:10px;
-      backdrop-filter:blur(6px);
-    }
-    .badge{
-      display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px;
-      background:rgba(34,197,94,0.12); color:#a7f3d0; border:1px dashed rgba(34,197,94,0.35); font-weight:700;
-    }
-    .badge.warn{background:rgba(245,158,11,0.12); color:#fde68a; border-color:rgba(245,158,11,0.35)}
-    .modeRow{display:flex; gap:8px; flex-wrap:wrap}
-    .main{display:flex; flex-direction:column}
-    .messages{flex:1; overflow:auto; padding:16px}
-    .bubble{
-      max-width:72%; margin:6px 0; padding:12px; border-radius:12px; white-space:pre-wrap;
-      background:rgba(255,255,255,0.08); border:1px solid var(--glassBorder);
-      box-shadow:0 8px 24px rgba(0,0,0,0.25);
-    }
-    .bubble.user{background:linear-gradient(180deg,var(--user),#1e40af); margin-left:auto}
-    .bubble.bot{background:linear-gradient(180deg,var(--bot),#111827); margin-right:auto}
-    .composer{
-      display:flex; gap:10px; padding:12px; border-top:1px solid var(--glassBorder);
-      background:linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.25)); backdrop-filter:blur(6px);
-    }
-    textarea{
-      flex:1; resize:none; min-height:48px; max-height:180px; padding:10px;
-      border-radius:10px; border:1px solid var(--glassBorder);
-      background:rgba(2,6,23,0.45); color:var(--text);
-    }
-    .code{
-      margin-top:10px; padding:10px; border-radius:10px;
-      background:rgba(2,6,23,0.6); border:1px solid var(--glassBorder);
-      font-family:ui-monospace,Menlo,Consolas,monospace; overflow:auto;
-    }
-    .small{font-size:.92rem}
-    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(96,165,250,0.12);color:#bfdbfe;border:1px dashed rgba(96,165,250,0.35);font-weight:700}
-    @media (max-width:980px){
-      .app{grid-template-columns:1fr; height:95vh}
-      .sidebar{order:2}
-      .main{order:1}
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YASSER BOT — نسخة نيو-نيون</title>
+<meta name="theme-color" content="#06b6d4">
+<style>
+  :root{
+    --bg:#0a0f1f; --panel:#0c1328; --text:#e6f2ff; --muted:#8aa1c0;
+    --primary:#06b6d4; --accent:#8b5cf6; --user:#0ea5e9; --bot:#1f2937;
+    --glass:rgba(255,255,255,0.06); --border:rgba(255,255,255,0.12);
+  }
+  :root.theme-yellow{
+    --bg:#0a0a06; --panel:#14140a; --text:#fffbe6; --muted:#f7e8a1;
+    --primary:#f5c518; --accent:#ffd65b; --user:#f5c518; --bot:#2a240f;
+    --glass:rgba(245,197,24,0.12); --border:rgba(245,197,24,0.25);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family:system-ui,"Noto Sans Arabic",Segoe UI,Roboto,sans-serif;
+    background:radial-gradient(1200px 600px at 80% -10%, rgba(6,182,212,0.15), transparent),
+               radial-gradient(900px 500px at 10% 120%, rgba(139,92,246,0.12), transparent),
+               linear-gradient(160deg,var(--bg),var(--panel));
+    color:var(--text);
+  }
+  /* Topbar */
+  .topbar{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:12px 16px; backdrop-filter:blur(10px);
+    background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    border-bottom:1px solid var(--border);
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:38px;height:38px;border-radius:12px; background:
+    conic-gradient(from 210deg,var(--primary),var(--accent),#22d3ee,var(--primary));
+    box-shadow:0 6px 18px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.35);
+  }
+  .title{font-weight:800;letter-spacing:.2px}
+  .muted{color:var(--muted)}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{
+    appearance:none;border:1px solid var(--border);outline:none;cursor:pointer;
+    padding:10px 12px;border-radius:10px;font-weight:700;color:white;
+    background:linear-gradient(180deg,var(--primary),#2563eb);
+    transition:transform .12s ease, filter .2s ease;
+  }
+  .btn:hover{transform:translateY(-1px);filter:saturate(1.06)}
+  .btn.ghost{background:linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))}
+  /* Layout */
+  .wrap{
+    max-width:1100px; margin:16px auto; padding:16px;
+    display:grid; grid-template-columns: 1fr; gap:16px;
+  }
+  .panel{
+    border:1px solid var(--border); border-radius:16px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    backdrop-filter:blur(10px);
+    box-shadow:0 25px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .chat{
+    display:grid; grid-template-columns: 340px 1fr; gap:16px;
+    padding:16px;
+  }
+  @media(max-width:960px){ .chat{grid-template-columns:1fr} }
+  /* Side config card */
+  .card{padding:14px; display:flex; flex-direction:column; gap:12px}
+  .select, textarea, input{
+    width:100%; background:rgba(2,6,23,0.5); color:var(--text);
+    border:1px solid var(--border); border-radius:10px; padding:10px;
+    backdrop-filter:blur(6px);
+  }
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;
+    background:rgba(34,197,94,0.12);color:#a7f3d0;border:1px dashed rgba(34,197,94,0.35);font-weight:700
+  }
+  .badge.warn{background:rgba(245,158,11,0.12);color:#fde68a;border-color:rgba(245,158,11,0.35)}
+  /* Messages */
+  .messages{padding:16px; overflow:auto; min-height:56vh}
+  .bubble{
+    max-width:72%; margin:8px 0; padding:12px; border-radius:14px; white-space:pre-wrap;
+    background:rgba(255,255,255,0.08); border:1px solid var(--border);
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+  .bubble.user{background:linear-gradient(180deg,var(--user),#1e40af); margin-left:auto}
+  .bubble.bot{background:linear-gradient(180deg,var(--bot),#111827); margin-right:auto}
+  .header{font-weight:800; margin-bottom:6px}
+  .code{
+    margin-top:10px; padding:10px; border-radius:10px;
+    background:rgba(2,6,23,0.6); border:1px solid var(--border);
+    font-family:ui-monospace,Menlo,Consolas,monospace; overflow:auto;
+  }
+  .composer{
+    display:flex;gap:10px;padding:12px;border-top:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.25));
+    backdrop-filter:blur(6px);
+  }
+  .floating{
+    position:fixed; bottom:18px; right:18px; display:flex; flex-direction:column; gap:8px;
+  }
+  .floating .btn{min-width:180px}
+</style>
 </head>
 <body>
-  <div class="app" id="appRoot" aria-live="polite">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <div class="title">YASSER BOT — مليون رد ذكي</div>
-          <div class="muted">واجهة زجاجية أنيقة · PWA · ردود موسوعية</div>
+  <header class="topbar panel">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <div class="title">YASSER BOT — نسخة نيو-نيون</div>
+        <div class="muted">واجهة جديدة تمامًا · PWA · مليون رد ذكي</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="toggleConfigBtn" class="btn ghost">فتح الإعدادات</button>
+      <button id="modeDarkBtn" class="btn">الوضع الليلي</button>
+      <button id="modeYellowBtn" class="btn ghost">الوضع الأصفر</button>
+      <button id="installBtn" class="btn ghost" style="display:none">تثبيت التطبيق</button>
+      <button id="downloadBtn" class="btn ghost">تنزيل الصفحة</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel chat">
+      <aside class="panel card" id="configPanel" aria-label="لوحة الإعدادات" style="display:none">
+        <div class="badge">فضاء توليد: ~1,000,000 رد</div>
+        <div class="badge warn" id="countBadge">الجلسة الحالية: 0 رد</div>
+
+        <label>المجال الأساسي</label>
+        <select id="domainSelect" class="select">
+          <option value="">تلقائي</option>
+          <option>برمجة</option>
+          <option>تشفير</option>
+          <option>شبكات</option>
+          <option>قواعد بيانات</option>
+          <option>ذكاء اصطناعي</option>
+          <option>هندسة برمجيات</option>
+          <option>أمن معلومات</option>
+          <option>سحابة</option>
+          <option>أنظمة</option>
+          <option>واجهات وتجربة المستخدم</option>
+          <option>هزار</option>
+          <option>اختراق</option>
+        </select>
+
+        <label>أسلوب الرد</label>
+        <select id="styleSelect" class="select">
+          <option value="مختصر">مختصر</option>
+          <option value="مفصل">مفصل</option>
+          <option value="تقني">تقني</option>
+          <option value="تعليمي">تعليمي</option>
+          <option value="قائمة نقاط">قائمة نقاط</option>
+        </select>
+
+        <label>إضافة أكواد</label>
+        <select id="codeSelect" class="select">
+          <option value="لا">لا</option>
+          <option value="JavaScript">JavaScript</option>
+          <option value="Python">Python</option>
+          <option value="C#">C#</option>
+          <option value="SQL">SQL</option>
+          <option value="Shell">Shell</option>
+        </select>
+
+        <div class="muted">ملاحظة: ردود "الاختراق" توعوية وآمنة فقط.</div>
+      </aside>
+
+      <section class="panel" style="display:flex;flex-direction:column">
+        <div id="messages" class="messages" role="log" aria-live="polite"></div>
+        <div class="composer">
+          <textarea id="input" placeholder="اكتب سؤالك هنا..." aria-label="نص الرسالة"></textarea>
+          <button id="sendBtn" class="btn">إرسال</button>
         </div>
-      </div>
+      </section>
+    </section>
+  </main>
 
-      <div class="controls">
-        <button id="installBtn" class="btn" style="display:none">تثبيت التطبيق</button>
-        <button id="downloadBtn" class="btn secondary">تنزيل الصفحة</button>
-      </div>
-
-      <label class="small">المجال الأساسي</label>
-      <select id="domainSelect" class="select" aria-label="المجال الأساسي">
-        <option value="">تلقائي</option>
-        <option>برمجة</option>
-        <option>تشفير</option>
-        <option>شبكات</option>
-        <option>قواعد بيانات</option>
-        <option>ذكاء اصطناعي</option>
-        <option>هندسة برمجيات</option>
-        <option>أمن معلومات</option>
-        <option>سحابة</option>
-        <option>أنظمة</option>
-        <option>واجهات وتجربة المستخدم</option>
-        <option>هزار</option>
-        <option>اختراق</option>
-      </select>
-
-      <label class="small">أسلوب الرد</label>
-      <select id="styleSelect" class="select" aria-label="أسلوب الرد">
-        <option value="مختصر">مختصر</option>
-        <option value="مفصل">مفصل</option>
-        <option value="تقني">تقني</option>
-        <option value="تعليمي">تعليمي</option>
-        <option value="قائمة نقاط">قائمة نقاط</option>
-      </select>
-
-      <label class="small">إضافة أكواد برمجية</label>
-      <select id="codeSelect" class="select" aria-label="إضافة أكواد">
-        <option value="لا">لا</option>
-        <option value="JavaScript">JavaScript</option>
-        <option value="Python">Python</option>
-        <option value="C#">C#</option>
-        <option value="SQL">SQL</option>
-        <option value="Shell">Shell</option>
-      </select>
-
-      <div class="modeRow" aria-hidden="false">
-        <span class="pill">تبديل الوضع</span>
-        <button id="modeDarkBtn" class="btn">الوضع الليلي</button>
-        <button id="modeYellowBtn" class="btn secondary">الوضع الأصفر الزجاجي</button>
-      </div>
-
-      <div class="badge" id="capBadge">فضاء توليد: ~1,000,000 رد ممكن</div>
-      <div class="badge warn" id="countBadge">الجلسة الحالية: 0 رد</div>
-
-      <div class="muted small">
-        ملاحظة: الردود الخاصة بـ "الاختراق" ستكون توعوية ومسؤولة فقط، لا تعليمات عملية.
-      </div>
-    </aside>
-
-    <main class="main">
-      <div id="messages" class="messages" role="log" aria-live="polite"></div>
-      <div class="composer">
-        <textarea id="input" placeholder="اكتب سؤالك هنا..." aria-label="حقل الرسالة"></textarea>
-        <button id="sendBtn" class="btn">إرسال</button>
-      </div>
-    </main>
+  <!-- أزرار عائمة سريعة -->
+  <div class="floating">
+    <button id="quickConfigBtn" class="btn ghost">إعدادات سريعة</button>
+    <button id="quickClearBtn" class="btn ghost">مسح المحادثة</button>
   </div>
 
 <script>
-/* YASSER BOT — نسخة جديدة كاملة في ملف واحد
-   - زر إرسال شغال
-   - زر تثبيت يظهر عند beforeinstallprompt
-   - تبديل الوضع شغال
-   - تنزيل الصفحة شغال
-   - ردود ذكية قابلة للتوليد حتى 1,000,000 عبر مزج القوالب
-   - حماية: لا تعليمات اختراق عملية
-*/
-
-document.addEventListener('DOMContentLoaded', function () {
-  // عناصر DOM
-  const installBtn = document.getElementById('installBtn');
-  const downloadBtn = document.getElementById('downloadBtn');
-  const modeDarkBtn = document.getElementById('modeDarkBtn');
-  const modeYellowBtn = document.getElementById('modeYellowBtn');
+document.addEventListener('DOMContentLoaded', function(){
+  // عناصر
   const sendBtn = document.getElementById('sendBtn');
   const inputEl = document.getElementById('input');
   const messagesEl = document.getElementById('messages');
+  const countBadge = document.getElementById('countBadge');
   const domainSelect = document.getElementById('domainSelect');
   const styleSelect = document.getElementById('styleSelect');
   const codeSelect = document.getElementById('codeSelect');
-  const countBadge = document.getElementById('countBadge');
+  const modeDarkBtn = document.getElementById('modeDarkBtn');
+  const modeYellowBtn = document.getElementById('modeYellowBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const installBtn = document.getElementById('installBtn');
+  const toggleConfigBtn = document.getElementById('toggleConfigBtn');
+  const configPanel = document.getElementById('configPanel');
+  const quickConfigBtn = document.getElementById('quickConfigBtn');
+  const quickClearBtn = document.getElementById('quickClearBtn');
 
   let sessionCount = 0;
   let deferredPrompt = null;
 
-  // مجالات وكلمات مفتاحية
+  // مجالات
   const DOMAINS = {
     "برمجة": ["javascript","python","c#","rust","go","oop","fp","patterns","testing","pwa"],
-    "تشفير": ["aes","chacha","rsa","ecc","ed25519","sha","argon2","hkdf","nonce","tls"],
+    "تشفير": ["aes-gcm","chacha20","rsa","ecc","ed25519","sha-256","argon2","hkdf","nonce","tls"],
     "شبكات": ["tcp","udp","http/2","http/3","quic","dns","cdn","proxy","load balancer","socket"],
     "قواعد بيانات": ["postgresql","mysql","mongodb","index","acid","transactions","sharding","replication","query plan","cache"],
     "ذكاء اصطناعي": ["cnn","rnn","transformer","attention","embeddings","rl","prompt","fine-tune","inference","latency"],
@@ -227,20 +232,41 @@ document.addEventListener('DOMContentLoaded', function () {
     ]
   };
 
-  // توليد مقتطفات كود
   function makeCodeSnippet(topic, lang){
     const t = topic || "Example";
     const map = {
-      "JavaScript": `// ${t} — مثال JavaScript\nasync function example(){\n  const encoder = new TextEncoder();\n  const data = encoder.encode("hello");\n  console.log("len:", data.length);\n}\nexample();`,
-      "Python": `# ${t} — مثال Python\ndef example():\n    data = "hello".encode("utf-8")\n    print("len:", len(data))\nexample()`,
-      "C#": `// ${t} — مثال C#\nusing System;\nclass Demo {\n  static void Main(){\n    var data = System.Text.Encoding.UTF8.GetBytes("hello");\n    Console.WriteLine("len: " + data.Length);\n  }\n}`,
-      "SQL": `-- ${t} — مثال SQL\nSELECT name, score\nFROM users\nWHERE score > 90\nORDER BY score DESC;`,
-      "Shell": `# ${t} — مثال Shell\ntext="hello"\necho "${#text}"`
+      "JavaScript": `// ${t} — مثال JavaScript
+async function example(){
+  const encoder = new TextEncoder();
+  const data = encoder.encode("hello");
+  console.log("len:", data.length);
+}
+example();`,
+      "Python": `# ${t} — مثال Python
+def example():
+    data = "hello".encode("utf-8")
+    print("len:", len(data))
+example()`,
+      "C#": `// ${t} — مثال C#
+using System;
+class Demo {
+  static void Main(){
+    var data = System.Text.Encoding.UTF8.GetBytes("hello");
+    Console.WriteLine("len: " + data.Length);
+  }
+}`,
+      "SQL": `-- ${t} — مثال SQL
+SELECT name, score
+FROM users
+WHERE score > 90
+ORDER BY score DESC;`,
+      "Shell": `# ${t} — مثال Shell
+text="hello"
+echo "${#text}"`
     };
     return map[lang] || "";
   }
 
-  // كشف المجال والموضوع من السؤال
   function detectDomainAndTopic(qText){
     const lower = qText.toLowerCase();
     const manual = (domainSelect.value || "").trim();
@@ -257,7 +283,6 @@ document.addEventListener('DOMContentLoaded', function () {
     return { domain: "برمجة", topic: "patterns" };
   }
 
-  // حماية المحتوى الحساس (اختراق)
   function isSensitive(domain, qText){
     const lower = qText.toLowerCase();
     if(domain === "اختراق"){
@@ -267,7 +292,6 @@ document.addEventListener('DOMContentLoaded', function () {
     return false;
   }
 
-  // هاش لإنتاج معرف ضمن مليون
   function fingerprint(...parts){
     const s = parts.join("|");
     let h = 2166136261 >>> 0;
@@ -275,7 +299,6 @@ document.addEventListener('DOMContentLoaded', function () {
     return (h % 1000000);
   }
 
-  // توليد رد غني وآمن
   function composeRichReply(question){
     const { domain, topic } = detectDomainAndTopic(question);
     const style = styleSelect.value || "مفصل";
@@ -286,56 +309,46 @@ document.addEventListener('DOMContentLoaded', function () {
     const closer = TEMPLATES.closers[Math.floor(Math.random()*TEMPLATES.closers.length)];
 
     if(isSensitive(domain, question)){
-      const safe = `${intro}المجال: ${domain}. هذا موضوع حساس؛ سأقدّم إرشادات توعوية ومسؤولة فقط:\n${bullet} اتبع إطار اختبار اختراق قانوني ومصرح به.\n${bullet} ركّز على تقييم التهديدات، التصحيح، وتعزيز المراقبة.\n${bullet} استخدم بيئات تدريب قانونية وأدوات تقييم آمنة.\n${closer}`;
+      const safe = `${intro}المجال: ${domain}. موضوع حساس؛ أرد عليك بإرشادات توعوية عامة:\n${bullet} اتبع اختبار اختراق قانوني بموافقة مكتوبة.\n${bullet} ركّز على نماذج التهديد، التصحيح، والمراقبة.\n${bullet} استخدم منصات تدريب قانونية.\n${closer}`;
       const id = fingerprint(question, domain, topic, style, codeLang);
-      return { header:`رد #${id} — مجال: ${domain} | موضوع: ${topic} | أسلوب: ${style}`, text: safe, code: "" };
+      return { header:`رد #${id} — ${domain} | ${topic} | ${style}`, text: safe, code: "" };
     }
 
-    const paragraphA = `${intro}${domain} — الموضوع: ${topic}. هذا الرد يوازن بين المفهوم والتطبيق العملي بصورة قابلة للتنفيذ.`;
-    const paragraphB = `${detailKind}: حدّد الهدف والقيود، اختر الأدوات والأنماط المناسبة، جرّب بسرعة، قِس النتائج، وحسّن تدريجيًا.`;
+    let body = "";
+    const paragraphA = `${intro}${domain} — الموضوع: ${topic}. موازنة المفهوم والتطبيق للحصول على نتيجة عملية.`;
+    const paragraphB = `${detailKind}: حدّد الهدف والقيود، اختر الأدوات المناسبة، جرّب بسرعة، قِس النتائج، وحسّن تدريجيًا.`;
     const points = [
-      `${bullet} لماذا ${topic}؟ لمعالجة مشكلة محددة بكفاءة ضمن سياق واضح.`,
+      `${bullet} لماذا ${topic}؟ لأنه يعالج مشكلة محددة بكفاءة ضمن سياق واضح.`,
       `${bullet} خطوات عملية: حدّد المدخلات، اعزل التعقيد، اختبر الحدود، راقب الأداء.`,
       `${bullet} أخطاء شائعة: تجاهل التوثيق، ضعف إدارة الأسرار، تعقيد مبالغ فيه.`,
       `${bullet} تكامل: اربط ${topic} مع طبقات الخدمة، التخزين المؤقت، والمراقبة.`
     ];
 
-    let body = "";
-    if(style === "مختصر"){
-      body = `${paragraphA}\n${closer}`;
-    } else if(style === "مفصل" || style === "تعليمي"){
-      body = `${paragraphA}\n${paragraphB}\n${points.join("\n")}\n${closer}`;
-    } else if(style === "تقني"){
-      body = `${paragraphA}\n${paragraphB}\n${points.slice(0,3).join("\n")}\n${closer}`;
-    } else {
-      body = `${paragraphA}\n${points.join("\n")}\n${closer}`;
-    }
+    const styleVal = style;
+    if(styleVal === "مختصر") body = `${paragraphA}\n${closer}`;
+    else if(styleVal === "مفصل" || styleVal === "تعليمي") body = `${paragraphA}\n${paragraphB}\n${points.join("\n")}\n${closer}`;
+    else if(styleVal === "تقني") body = `${paragraphA}\n${paragraphB}\n${points.slice(0,3).join("\n")}\n${closer}`;
+    else body = `${paragraphA}\n${points.join("\n")}\n${closer}`;
 
     if(domain === "هزار"){
-      body = `${intro}خفة ظل تقنية:\n${bullet} لما السيرفر يقول "Internal Error" هو بس محتاج قهوة ☕\n${bullet} لما الـ build ينجح من أول مرة: تأكد إنك مش في Simulation 😅\n${closer}`;
+      body = `${intro}خفة ظل تقنية:\n${bullet} السيرفر لما يقول "Internal Error" غالبًا محتاج قهوة ☕\n${bullet} لو الـ build نجح من أول مرة: راجع المُدخلات بحب 😅\n${closer}`;
     }
 
     const codeBlock = codeLang !== "لا" ? makeCodeSnippet(topic, codeLang) : "";
-    const id = fingerprint(question, domain, topic, style, codeLang);
-    return { header:`رد #${id} — مجال: ${domain} | موضوع: ${topic} | أسلوب: ${style}${codeBlock?" | كود: "+codeLang:""}`, text: body, code: codeBlock };
+    const id = fingerprint(question, domain, topic, style, codeLang, intro, detailKind, bullet, closer);
+    return { header:`رد #${id} — ${domain} | ${topic} | ${style}${codeBlock?" | كود: "+codeLang:""}`, text: body, code: codeBlock };
   }
 
-  // إضافة فقاعة للرسائل
   function addBubble(text, cls, code){
     const div = document.createElement('div');
     div.className = `bubble ${cls}`;
     const lines = text.split('\n');
     const header = lines[0] || "";
     const rest = lines.slice(1).join('\n');
-    const headerEl = document.createElement('div');
-    headerEl.style.fontWeight = '800';
-    headerEl.style.marginBottom = '6px';
-    headerEl.textContent = header;
-    div.appendChild(headerEl);
-    if(rest) {
-      const bodyEl = document.createElement('div');
-      bodyEl.textContent = rest;
-      div.appendChild(bodyEl);
+    const h = document.createElement('div'); h.className = 'header'; h.textContent = header;
+    div.appendChild(h);
+    if(rest){
+      const b = document.createElement('div'); b.textContent = rest; div.appendChild(b);
     }
     if(code){
       const pre = document.createElement('pre');
@@ -347,7 +360,6 @@ document.addEventListener('DOMContentLoaded', function () {
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  // إرسال رسالة
   function sendMessage(){
     const q = (inputEl.value || "").trim();
     if(!q) return;
@@ -361,123 +373,85 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 250);
   }
 
-  // ربط الأحداث
+  // أحداث
   sendBtn.addEventListener('click', sendMessage);
-  inputEl.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
-  });
+  inputEl.addEventListener('keydown', (e)=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMessage(); }});
 
-  modeDarkBtn.addEventListener('click', ()=>{
-    document.documentElement.classList.remove('theme-yellow');
-  });
-  modeYellowBtn.addEventListener('click', ()=>{
-    document.documentElement.classList.add('theme-yellow');
-  });
+  modeDarkBtn.addEventListener('click', ()=> document.documentElement.classList.remove('theme-yellow'));
+  modeYellowBtn.addEventListener('click', ()=> document.documentElement.classList.add('theme-yellow'));
 
   downloadBtn.addEventListener('click', ()=>{
     const html = document.documentElement.outerHTML;
     const blob = new Blob([html], {type:'text/html'});
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'YASSER-BOT.html';
+    const a = document.createElement('a'); a.href = url; a.download = 'YASSER-BOT-neon.html';
     document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   });
 
-  // PWA: beforeinstallprompt handling
+  toggleConfigBtn.addEventListener('click', ()=>{
+    const v = configPanel.style.display;
+    configPanel.style.display = (v==='none'||!v) ? 'block' : 'none';
+  });
+  quickConfigBtn.addEventListener('click', ()=> toggleConfigBtn.click());
+  quickClearBtn.addEventListener('click', ()=>{
+    messagesEl.innerHTML = "";
+    sessionCount = 0;
+    countBadge.textContent = `الجلسة الحالية: 0 رد`;
+    addBubble("تم مسح المحادثة. ابدأ سؤالًا جديدًا.", "bot");
+  });
+
+  // تثبيت PWA
   window.addEventListener('beforeinstallprompt', (e)=>{
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.style.display = 'inline-block';
+    e.preventDefault(); deferredPrompt = e; installBtn.style.display='inline-block';
   });
   installBtn.addEventListener('click', async ()=>{
-    if(deferredPrompt){
-      deferredPrompt.prompt();
-      try{ await deferredPrompt.userChoice; }catch(e){}
-      deferredPrompt = null;
-      installBtn.style.display = 'none';
-    } else {
-      alert('إذا لم يظهر حوار التثبيت، استخدم قائمة المتصفح لتثبيت التطبيق.');
-    }
+    if(deferredPrompt){ deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; installBtn.style.display='none'; }
+    else alert('استخدم قائمة المتصفح لتثبيت التطبيق إن لم يظهر الحوار.');
   });
 
-  // إنشاء أيقونة ديناميكية (Promise)
-  function createIcon(size){
-    return new Promise((resolve)=>{
-      const c = document.createElement('canvas'); c.width = size; c.height = size;
-      const ctx = c.getContext('2d');
-      const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#0ea5e9';
-      const g = ctx.createLinearGradient(0,0,size,size);
-      g.addColorStop(0, primary); g.addColorStop(1, '#6366f1');
-      ctx.fillStyle = g; ctx.fillRect(0,0,size,size);
-      ctx.fillStyle = '#fff'; ctx.font = `${Math.floor(size*0.18)}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText('YASSER', size/2, size/2);
-      c.toBlob(function(blob){
-        if(blob) resolve(URL.createObjectURL(blob));
-        else resolve(null);
-      }, 'image/png');
-    });
+  // Manifest ديناميكي + أيقونة
+  async function createIcon(size){
+    const c=document.createElement('canvas'); c.width=size; c.height=size;
+    const ctx=c.getContext('2d');
+    const g=ctx.createLinearGradient(0,0,size,size); g.addColorStop(0,'#06b6d4'); g.addColorStop(1,'#8b5cf6');
+    ctx.fillStyle=g; ctx.fillRect(0,0,size,size);
+    ctx.fillStyle='#fff'; ctx.font=`${Math.floor(size*0.22)}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('YASSER', size/2, size/2);
+    const b=await new Promise(res=>c.toBlob(res,'image/png')); return URL.createObjectURL(b);
   }
-
-  // إعداد manifest ديناميكي
   async function setupManifest(){
-    try{
-      const icon192 = await createIcon(192);
-      const icon512 = await createIcon(512);
-      const manifest = {
-        name: "YASSER BOT — 1M Replies",
-        short_name: "YASSER BOT",
-        start_url: "./",
-        display: "standalone",
-        background_color: "#0f172a",
-        theme_color: "#0ea5e9",
-        icons: []
-      };
-      if(icon192) manifest.icons.push({src: icon192, sizes:"192x192", type:"image/png"});
-      if(icon512) manifest.icons.push({src: icon512, sizes:"512x512", type:"image/png"});
-      const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('link');
-      link.rel = 'manifest'; link.href = url;
-      document.head.appendChild(link);
-    }catch(e){
-      // تجاهل أخطاء الأيقونة الديناميكية
-    }
+    const i192=await createIcon(192); const i512=await createIcon(512);
+    const m={name:"YASSER BOT — Neon Edition",short_name:"YASSER BOT",start_url:"./",display:"standalone",background_color:"#0c1328",theme_color:"#06b6d4",icons:[{src:i192,sizes:"192x192",type:"image/png"},{src:i512,sizes:"512x512",type:"image/png"}]};
+    const blob=new Blob([JSON.stringify(m)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('link'); link.rel='manifest'; link.href=url; document.head.appendChild(link);
   }
 
-  // تسجيل Service Worker بسيط
+  // Service Worker
   async function setupSW(){
     if(!('serviceWorker' in navigator)) return;
-    const swCode = `
-      const CACHE='yasser-bot-onefile-v1';
-      self.addEventListener('install', e=>{
-        e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./'])));
-        self.skipWaiting();
-      });
-      self.addEventListener('activate', e=>{
-        e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
-        self.clients.claim();
-      });
-      self.addEventListener('fetch', e=>{
-        e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{ const copy = res.clone(); caches.open(CACHE).then(c=>c.put(e.request, copy)); return res; })));
+    const sw = `
+      const CACHE='yasser-neon-v1';
+      self.addEventListener('install',e=>{ e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./']))); self.skipWaiting(); });
+      self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))); self.clients.claim(); });
+      self.addEventListener('fetch',e=>{
+        e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{
+          const copy=res.clone(); caches.open(CACHE).then(c=>c.put(e.request,copy)); return res;
+        })));
       });
     `;
-    try{
-      const blob = new Blob([swCode], {type:'application/javascript'});
-      const url = URL.createObjectURL(blob);
-      await navigator.serviceWorker.register(url, {scope:'./'});
-    }catch(e){
-      // تجاهل أخطاء التسجيل
-    }
+    const blob=new Blob([sw],{type:'application/javascript'});
+    const url=URL.createObjectURL(blob);
+    navigator.serviceWorker.register(url,{scope:'./'});
   }
 
-  // إقلاع
+  // Boot
   (async function boot(){
     await setupManifest();
     await setupSW();
-    addBubble("مرحبًا! أنا YASSER BOT. اسألني في أي مجال، واختر الوضع الذي تفضله من الشريط الجانبي.", "bot");
+    addBubble("مرحبًا! أنا YASSER BOT — نسخة نيو-نيون. افتح الإعدادات من الشريط العلوي لو عايز تخصّص الردود.", "bot");
   })();
-
-}); // DOMContentLoaded
+});
 </script>
 </body>
 </html>
