@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>موسوعة البرمجة والتشفير — ملف واحد</title>
+  <meta name="theme-color" content="#0ea5e9">
+  <style>
+    :root{
+      --bg:#0b1220; --card:#0f172a; --text:#e5e7eb; --muted:#94a3b8;
+      --primary:#0ea5e9; --accent:#22d3ee; --green:#22c55e; --yellow:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui,"Noto Sans Arabic",Segoe UI,Roboto,sans-serif;
+      background:linear-gradient(160deg,#0b1220,#0f172a); color:var(--text);
+      display:flex; align-items:flex-start; justify-content:center;
+    }
+    .app{
+      width:min(1100px,96vw); margin:22px; padding:22px; border-radius:18px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(6px);
+      box-shadow:0 25px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:42px;height:42px;border-radius:12px;position:relative;
+      background:conic-gradient(from 210deg,#0ea5e9,#22d3ee,#6366f1,#0ea5e9)}
+    .title{font-weight:800;letter-spacing:.2px}
+    .muted{color:var(--muted);font-size:.92rem}
+    .btn{
+      appearance:none;border:1px solid rgba(255,255,255,0.1); outline:none;cursor:pointer;
+      padding:10px 14px;border-radius:12px;font-weight:700;color:white;
+      background:linear-gradient(180deg,#0ea5e9,#2563eb);
+      transition:transform .12s ease, filter .2s ease;
+    }
+    .btn:hover{transform:translateY(-1px); filter:saturate(1.08)}
+    .btn.secondary{background:linear-gradient(180deg,#1f2937,#0f172a)}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+    .card{grid-column:span 12;background:rgba(255,255,255,0.05);border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,0.08)}
+    @media(min-width:920px){
+      .card.span6{grid-column:span 6}
+      .card.span4{grid-column:span 4}
+    }
+    h2,h3{margin:0 0 8px 0;font-size:1.2rem}
+    .list{display:grid;gap:8px}
+    .item{padding:10px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px dashed rgba(255,255,255,0.1)}
+    .kbadge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(34,197,94,0.12);color:#a7f3d0;border:1px dashed rgba(34,197,94,0.35);font-weight:700}
+    .yb{background:rgba(245,158,11,0.12);color:#fde68a;border-color:rgba(245,158,11,0.35)}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+    .code{padding:10px;border-radius:10px;background:rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.08);overflow:auto}
+    .footer{margin-top:14px;text-align:center;color:var(--muted);font-size:.9rem}
+    .status{margin-top:8px;color:#a7f3d0;display:flex;align-items:center;gap:8px}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 6px rgba(34,197,94,0.12)}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div class="title">موسوعة البرمجة والتشفير — ملف واحد</div>
+          <div class="muted">PWA قابل للتثبيت + أوفلاين + توليد 10000 سطر محتوى</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="installBtn" class="btn">تثبيت التطبيق</button>
+        <button id="generateBtn" class="btn">توليد 10000 سطر</button>
+        <button id="downloadBtn" class="btn secondary">تنزيل الملف كـ HTML</button>
+        <button id="clearBtn" class="btn secondary">مسح المحتوى</button>
+      </div>
+    </div>
+
+    <section class="card span6">
+      <h2>مفاهيم أساسية في التشفير</h2>
+      <div class="list" id="concepts">
+        <div class="item"><b>التناظرية:</b> تشفير متماثل بمفتاح واحد (AES, ChaCha20).</div>
+        <div class="item"><b>اللا-تناظرية:</b> زوج مفاتيح عام/خاص (RSA, ECC).</div>
+        <div class="item"><b>الدوال التجزئية:</b> SHA-2, SHA-3, BLAKE3 للتحقق والنزاهة.</div>
+        <div class="item"><b>التوقيع الرقمي:</b> مصادقة ومنع الإنكار (ECDSA, Ed25519).</div>
+        <div class="item"><b>تبادل المفاتيح:</b> DH/ECDH لإنشاء سر مشترك عبر قناة عامة.</div>
+      </div>
+    </section>
+
+    <section class="card span6">
+      <h2>خوارزميات مختارة</h2>
+      <div class="list" id="algos">
+        <div class="item"><b>AES-GCM:</b> تشفير + مصادقة، مناسب للشبكات.</div>
+        <div class="item"><b>ChaCha20-Poly1305:</b> أداء ممتاز على الأجهزة المحمولة.</div>
+        <div class="item"><b>RSA-2048:</b> تشفير/توقيع كلاسيكي، مفاتيح كبيرة.</div>
+        <div class="item"><b>Curve25519:</b> منحنى بيضاوي حديث لتبادل مفاتيح سريع وآمن.</div>
+        <div class="item"><b>SHA-256:</b> تجزئة واسعة الاستخدام، جزء من SHA-2.</div>
+      </div>
+    </section>
+
+    <section class="card span4">
+      <h3>مصطلحات</h3>
+      <div class="list" id="glossary">
+        <div class="item"><b>Nonce:</b> عدد يُستخدم مرة واحدة لمنع إعادة التشغيل.</div>
+        <div class="item"><b>Salt:</b> ملح يُضاف لكلمة المرور ضد جداول القوس.</div>
+        <div class="item"><b>KDF:</b> اشتقاق مفتاح من مادة أولية (PBKDF2, Argon2).</div>
+        <div class="item"><b>MAC:</b> رمز مصادقة رسالة (HMAC, Poly1305).</div>
+      </div>
+    </section>
+
+    <section class="card span4">
+      <h3>أمثلة برمجية قصيرة</h3>
+      <div class="code mono" id="snippets">
+        // ملاحظة: أمثلة توضيحية فقط
+        // pseudo: تشفير متناظر
+        function encrypt(key, iv, data){ /* AES-GCM */ }
+        function decrypt(key, iv, data){ /* AES-GCM */ }
+        // ECDH: اشتراك مفتاح
+        // signature: Ed25519
+      </div>
+      <div class="status"><span class="dot"></span> جاهز للتثبيت وتوليد المحتوى</div>
+    </section>
+
+    <section class="card span4">
+      <h3>جدول تاريخي مختصر</h3>
+      <div class="list" id="timeline">
+        <div class="item"><b>1977:</b> تقديم RSA.</div>
+        <div class="item"><b>1998:</b> AES مسابقة معيار التشفير المتقدم.</div>
+        <div class="item"><b>2008:</b> ظهور Curve25519 على نطاق واسع.</div>
+        <div class="item"><b>2015:</b> معيار SHA‑3 (Keccak).</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>المحتوى المُولّد</h2>
+      <div class="kbadge">هدف: 10000 سطر</div>
+      <div class="actions">
+        <span class="kbadge yb" id="progress">0 / 10000</span>
+      </div>
+      <div id="generated" class="list"></div>
+    </section>
+
+    <div class="footer">مصمم بروح منتجات مايكروسوفت: خطوط كبيرة، أنيميشن خفيفة، وتجربة سلسة.</div>
+  </main>
+
+<script>
+(function(){
+  const installBtn = document.getElementById('installBtn');
+  const generateBtn = document.getElementById('generateBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const generatedEl = document.getElementById('generated');
+  const progressEl = document.getElementById('progress');
+  let deferredPrompt = null;
+
+  // أيقونة ديناميكية
+  async function createIcon(size){
+    const canvas = document.createElement('canvas');
+    canvas.width = size; canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    const grad = ctx.createLinearGradient(0,0,size,size);
+    grad.addColorStop(0,'#0ea5e9'); grad.addColorStop(1,'#6366f1');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,size,size);
+    ctx.fillStyle = '#fff'; ctx.font = `${Math.floor(size*0.32)}px sans-serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText("CRYPTO", size/2, size/2);
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    return URL.createObjectURL(blob);
+  }
+
+  // Manifest ديناميكي
+  async function setupManifest(){
+    const icon192 = await createIcon(192);
+    const icon512 = await createIcon(512);
+    const manifest = {
+      name: "Crypto & Programming — One File",
+      short_name: "CryptoProg",
+      start_url: "./",
+      display: "standalone",
+      background_color: "#ffffff",
+      theme_color: "#0ea5e9",
+      icons: [
+        { src: icon192, sizes: "192x192", type: "image/png" },
+        { src: icon512, sizes: "512x512", type: "image/png" }
+      ]
+    };
+    const blob = new Blob([JSON.stringify(manifest, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('link');
+    link.rel = 'manifest'; link.href = url;
+    document.head.appendChild(link);
+  }
+
+  // Service Worker ديناميكي
+  async function setupSW(){
+    if(!('serviceWorker' in navigator)) return;
+    const swCode = `
+      const CACHE='crypto-onefile-v1';
+      self.addEventListener('install', e=>{
+        e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./'])));
+        self.skipWaiting();
+      });
+      self.addEventListener('activate', e=>{
+        e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
+        self.clients.claim();
+      });
+      self.addEventListener('fetch', e=>{
+        e.respondWith(
+          caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{
+            const copy = res.clone();
+            caches.open(CACHE).then(c=>c.put(e.request, copy));
+            return res;
+          }))
+        );
+      });
+    `;
+    const blob = new Blob([swCode], {type:'application/javascript'});
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl, {scope:'./'});
+  }
+
+  // beforeinstallprompt
+  window.addEventListener('beforeinstallprompt', (e)=>{
+    e.preventDefault(); deferredPrompt = e;
+    installBtn.style.display = 'inline-block';
+  });
+  installBtn.addEventListener('click', async ()=>{
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    } else {
+      alert('استخدم زر التثبيت في المتصفح إن لم يظهر الحوار.');
+    }
+  });
+
+  // توليد 10000 سطر محتوى موسع
+  function chunkedGenerate(total = 10000, chunkSize = 250){
+    let count = 0;
+    const topics = [
+      "AES-GCM","ChaCha20-Poly1305","RSA-2048","ECC/Curve25519","ECDH","Ed25519",
+      "SHA-256","SHA-3/Keccak","BLAKE3","Argon2","PBKDF2","HKDF",
+      "Nonce","IV","Salt","MAC/HMAC","KDF","TLS","HTTPS","Certificates",
+      "Forward Secrecy","Zero Knowledge","Homomorphic","Side-Channel","Timing Attack",
+      "Padding Oracle","CTR/CFB/OFB","GCM","XChaCha20","Key Rotation","Entropy",
+      "PRNG","CSPRNG","Hybrid Crypto","Envelope","Public Key","Private Key",
+      "Key Management","Secure Storage","Hardware Token","FIDO2","WebCrypto API","PWA Security"
+    ];
+    const details = [
+      "تعريف قصير","أمثلة استخدام","مزايا","عيوب","ملاحظات أمنية","سيناريو عملي",
+      "كود شبه-برمجي","مقارنة مختصرة","قيود الأداء","نصائح تنفيذ","حالات فشل شائعة","أفضل ممارسات"
+    ];
+    function makeItem(i){
+      const t = topics[i % topics.length];
+      const d = details[i % details.length];
+      const text = `سطر ${i+1}: [${t}] — ${d}: شرح موجز مع نقاط تطبيق عملية، اعتبارات أمنية، وروابط عقلية للتصميم.`;
+      const div = document.createElement('div');
+      div.className = 'item';
+      div.textContent = text;
+      return div;
+    }
+    function step(){
+      const frag = document.createDocumentFragment();
+      for(let i=0; i<chunkSize && count<total; i++){
+        frag.appendChild(makeItem(count));
+        count++;
+      }
+      generatedEl.appendChild(frag);
+      progressEl.textContent = `${count} / ${total}`;
+      if(count < total){
+        requestIdleCallback ? requestIdleCallback(step) : setTimeout(step, 16);
+      } else {
+        progressEl.textContent = `${count} / ${total} — اكتمل ✅`;
+      }
+    }
+    step();
+  }
+
+  // تنزيل النسخة الحالية كملف HTML واحد
+  async function downloadCurrentHTML(){
+    const html = document.documentElement.outerHTML;
+    const blob = new Blob([html], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'crypto-programming-onefile.html';
+    document.body.appendChild(a); a.click();
+    a.remove(); URL.revokeObjectURL(url);
+  }
+
+  generateBtn.addEventListener('click', ()=>chunkedGenerate(10000, 250));
+  downloadBtn.addEventListener('click', downloadCurrentHTML);
+  clearBtn.addEventListener('click', ()=>{
+    generatedEl.innerHTML = ''; progressEl.textContent = '0 / 10000';
+  });
+
+  // تشغيل
+  (async function boot(){
+    await setupManifest();
+    await setupSW();
+  })();
+})();
+</script>
+</body>
+</html>
