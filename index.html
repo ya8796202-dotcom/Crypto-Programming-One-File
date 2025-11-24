@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>YASSER BOT </title>
+  <title>YASSER BOT — مليون رد ذكي</title>
   <meta name="theme-color" content="#0ea5e9" />
   <style>
     :root{
@@ -98,7 +98,7 @@
   </style>
 </head>
 <body>
-  <div class="app" id="appRoot">
+  <div class="app" id="appRoot" aria-live="polite">
     <aside class="sidebar">
       <div class="brand">
         <div class="logo" aria-hidden="true"></div>
@@ -114,7 +114,7 @@
       </div>
 
       <label class="small">المجال الأساسي</label>
-      <select id="domainSelect" class="select">
+      <select id="domainSelect" class="select" aria-label="المجال الأساسي">
         <option value="">تلقائي</option>
         <option>برمجة</option>
         <option>تشفير</option>
@@ -131,7 +131,7 @@
       </select>
 
       <label class="small">أسلوب الرد</label>
-      <select id="styleSelect" class="select">
+      <select id="styleSelect" class="select" aria-label="أسلوب الرد">
         <option value="مختصر">مختصر</option>
         <option value="مفصل">مفصل</option>
         <option value="تقني">تقني</option>
@@ -140,7 +140,7 @@
       </select>
 
       <label class="small">إضافة أكواد برمجية</label>
-      <select id="codeSelect" class="select">
+      <select id="codeSelect" class="select" aria-label="إضافة أكواد">
         <option value="لا">لا</option>
         <option value="JavaScript">JavaScript</option>
         <option value="Python">Python</option>
@@ -149,7 +149,7 @@
         <option value="Shell">Shell</option>
       </select>
 
-      <div class="modeRow">
+      <div class="modeRow" aria-hidden="false">
         <span class="pill">تبديل الوضع</span>
         <button id="modeDarkBtn" class="btn">الوضع الليلي</button>
         <button id="modeYellowBtn" class="btn secondary">الوضع الأصفر الزجاجي</button>
@@ -173,6 +173,15 @@
   </div>
 
 <script>
+/* YASSER BOT — نسخة جديدة كاملة في ملف واحد
+   - زر إرسال شغال
+   - زر تثبيت يظهر عند beforeinstallprompt
+   - تبديل الوضع شغال
+   - تنزيل الصفحة شغال
+   - ردود ذكية قابلة للتوليد حتى 1,000,000 عبر مزج القوالب
+   - حماية: لا تعليمات اختراق عملية
+*/
+
 document.addEventListener('DOMContentLoaded', function () {
   // عناصر DOM
   const installBtn = document.getElementById('installBtn');
@@ -190,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let sessionCount = 0;
   let deferredPrompt = null;
 
-  // مجالات وكلمات مفتاحية (مبسطة)
+  // مجالات وكلمات مفتاحية
   const DOMAINS = {
     "برمجة": ["javascript","python","c#","rust","go","oop","fp","patterns","testing","pwa"],
     "تشفير": ["aes","chacha","rsa","ecc","ed25519","sha","argon2","hkdf","nonce","tls"],
@@ -218,6 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ]
   };
 
+  // توليد مقتطفات كود
   function makeCodeSnippet(topic, lang){
     const t = topic || "Example";
     const map = {
@@ -230,6 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return map[lang] || "";
   }
 
+  // كشف المجال والموضوع من السؤال
   function detectDomainAndTopic(qText){
     const lower = qText.toLowerCase();
     const manual = (domainSelect.value || "").trim();
@@ -246,6 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return { domain: "برمجة", topic: "patterns" };
   }
 
+  // حماية المحتوى الحساس (اختراق)
   function isSensitive(domain, qText){
     const lower = qText.toLowerCase();
     if(domain === "اختراق"){
@@ -255,6 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return false;
   }
 
+  // هاش لإنتاج معرف ضمن مليون
   function fingerprint(...parts){
     const s = parts.join("|");
     let h = 2166136261 >>> 0;
@@ -262,6 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return (h % 1000000);
   }
 
+  // توليد رد غني وآمن
   function composeRichReply(question){
     const { domain, topic } = detectDomainAndTopic(question);
     const style = styleSelect.value || "مفصل";
@@ -306,6 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return { header:`رد #${id} — مجال: ${domain} | موضوع: ${topic} | أسلوب: ${style}${codeBlock?" | كود: "+codeLang:""}`, text: body, code: codeBlock };
   }
 
+  // إضافة فقاعة للرسائل
   function addBubble(text, cls, code){
     const div = document.createElement('div');
     div.className = `bubble ${cls}`;
@@ -332,6 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
+  // إرسال رسالة
   function sendMessage(){
     const q = (inputEl.value || "").trim();
     if(!q) return;
@@ -345,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 250);
   }
 
-  // ربط الأحداث (كل الأزرار)
+  // ربط الأحداث
   sendBtn.addEventListener('click', sendMessage);
   inputEl.addEventListener('keydown', (e)=>{
     if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
@@ -384,19 +400,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // أيقونة ديناميكية و manifest و service worker
-  async function createIcon(size){
-    const c = document.createElement('canvas'); c.width = size; c.height = size;
-    const ctx = c.getContext('2d');
-    const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#0ea5e9';
-    const g = ctx.createLinearGradient(0,0,size,size);
-    g.addColorStop(0, primary); g.addColorStop(1, '#6366f1');
-    ctx.fillStyle = g; ctx.fillRect(0,0,size,size);
-    ctx.fillStyle = '#fff'; ctx.font = `${Math.floor(size*0.18)}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText('YASSER', size/2, size/2);
-    return await new Promise(res=>c.toBlob(b=>res(URL.createObjectURL(b)),'image/png'));
+  // إنشاء أيقونة ديناميكية (Promise)
+  function createIcon(size){
+    return new Promise((resolve)=>{
+      const c = document.createElement('canvas'); c.width = size; c.height = size;
+      const ctx = c.getContext('2d');
+      const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#0ea5e9';
+      const g = ctx.createLinearGradient(0,0,size,size);
+      g.addColorStop(0, primary); g.addColorStop(1, '#6366f1');
+      ctx.fillStyle = g; ctx.fillRect(0,0,size,size);
+      ctx.fillStyle = '#fff'; ctx.font = `${Math.floor(size*0.18)}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('YASSER', size/2, size/2);
+      c.toBlob(function(blob){
+        if(blob) resolve(URL.createObjectURL(blob));
+        else resolve(null);
+      }, 'image/png');
+    });
   }
 
+  // إعداد manifest ديناميكي
   async function setupManifest(){
     try{
       const icon192 = await createIcon(192);
@@ -408,11 +430,10 @@ document.addEventListener('DOMContentLoaded', function () {
         display: "standalone",
         background_color: "#0f172a",
         theme_color: "#0ea5e9",
-        icons: [
-          { src: icon192, sizes: "192x192", type: "image/png" },
-          { src: icon512, sizes: "512x512", type: "image/png" }
-        ]
+        icons: []
       };
+      if(icon192) manifest.icons.push({src: icon192, sizes:"192x192", type:"image/png"});
+      if(icon512) manifest.icons.push({src: icon512, sizes:"512x512", type:"image/png"});
       const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
       const url = URL.createObjectURL(blob);
       const link = document.createElement('link');
@@ -423,6 +444,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // تسجيل Service Worker بسيط
   async function setupSW(){
     if(!('serviceWorker' in navigator)) return;
     const swCode = `
