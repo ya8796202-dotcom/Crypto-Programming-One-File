@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>YASSER BOT — مليون رد ذكي</title>
+  <title>YASSER BOT </title>
   <meta name="theme-color" content="#0ea5e9" />
   <style>
     :root{
@@ -90,7 +90,6 @@
     }
     .small{font-size:.92rem}
     .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(96,165,250,0.12);color:#bfdbfe;border:1px dashed rgba(96,165,250,0.35);font-weight:700}
-    /* responsive */
     @media (max-width:980px){
       .app{grid-template-columns:1fr; height:95vh}
       .sidebar{order:2}
@@ -174,8 +173,7 @@
   </div>
 
 <script>
-/* YASSER BOT — نسخة كاملة مع أزرار شغالة */
-(function(){
+document.addEventListener('DOMContentLoaded', function () {
   // عناصر DOM
   const installBtn = document.getElementById('installBtn');
   const downloadBtn = document.getElementById('downloadBtn');
@@ -192,10 +190,10 @@
   let sessionCount = 0;
   let deferredPrompt = null;
 
-  // مجالات وكلمات مفتاحية
+  // مجالات وكلمات مفتاحية (مبسطة)
   const DOMAINS = {
     "برمجة": ["javascript","python","c#","rust","go","oop","fp","patterns","testing","pwa"],
-    "تشفير": ["aes","chaCha","rsa","ecc","ed25519","sha","argon2","hkdf","nonce","tls"],
+    "تشفير": ["aes","chacha","rsa","ecc","ed25519","sha","argon2","hkdf","nonce","tls"],
     "شبكات": ["tcp","udp","http/2","http/3","quic","dns","cdn","proxy","load balancer","socket"],
     "قواعد بيانات": ["postgresql","mysql","mongodb","index","acid","transactions","sharding","replication","query plan","cache"],
     "ذكاء اصطناعي": ["cnn","rnn","transformer","attention","embeddings","rl","prompt","fine-tune","inference","latency"],
@@ -208,7 +206,6 @@
     "اختراق": ["مسؤولية","توعية","حماية","اختبار اختراق","ethical"]
   };
 
-  // قوالب
   const TEMPLATES = {
     intro: ["ملخص سريع: ","تمهيد: ","فكرة أساسية: ","إطار الفهم: ","الصورة الكبيرة: "],
     details: ["التفاصيل التقنية","الجوانب العملية","أفضل الممارسات","تحذيرات شائعة","أداء وقيود"],
@@ -221,7 +218,6 @@
     ]
   };
 
-  // توليد مقتطفات كود
   function makeCodeSnippet(topic, lang){
     const t = topic || "Example";
     const map = {
@@ -234,7 +230,6 @@
     return map[lang] || "";
   }
 
-  // كشف المجال والموضوع من السؤال
   function detectDomainAndTopic(qText){
     const lower = qText.toLowerCase();
     const manual = (domainSelect.value || "").trim();
@@ -251,7 +246,6 @@
     return { domain: "برمجة", topic: "patterns" };
   }
 
-  // منع أو توجيه المحتوى الحساس
   function isSensitive(domain, qText){
     const lower = qText.toLowerCase();
     if(domain === "اختراق"){
@@ -261,7 +255,13 @@
     return false;
   }
 
-  // توليد رد غني
+  function fingerprint(...parts){
+    const s = parts.join("|");
+    let h = 2166136261 >>> 0;
+    for(let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return (h % 1000000);
+  }
+
   function composeRichReply(question){
     const { domain, topic } = detectDomainAndTopic(question);
     const style = styleSelect.value || "مفصل";
@@ -277,7 +277,6 @@
       return { header:`رد #${id} — مجال: ${domain} | موضوع: ${topic} | أسلوب: ${style}`, text: safe, code: "" };
     }
 
-    // بناء الرد
     const paragraphA = `${intro}${domain} — الموضوع: ${topic}. هذا الرد يوازن بين المفهوم والتطبيق العملي بصورة قابلة للتنفيذ.`;
     const paragraphB = `${detailKind}: حدّد الهدف والقيود، اختر الأدوات والأنماط المناسبة، جرّب بسرعة، قِس النتائج، وحسّن تدريجيًا.`;
     const points = [
@@ -307,19 +306,9 @@
     return { header:`رد #${id} — مجال: ${domain} | موضوع: ${topic} | أسلوب: ${style}${codeBlock?" | كود: "+codeLang:""}`, text: body, code: codeBlock };
   }
 
-  // هاش بسيط لإنتاج معرف فريد ضمن مليون
-  function fingerprint(...parts){
-    const s = parts.join("|");
-    let h = 2166136261 >>> 0;
-    for(let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
-    return (h % 1000000);
-  }
-
-  // إضافة فقاعة للرسائل
   function addBubble(text, cls, code){
     const div = document.createElement('div');
     div.className = `bubble ${cls}`;
-    // نص الرأس والفقرات
     const lines = text.split('\n');
     const header = lines[0] || "";
     const rest = lines.slice(1).join('\n');
@@ -343,7 +332,6 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  // إرسال رسالة
   function sendMessage(){
     const q = (inputEl.value || "").trim();
     if(!q) return;
@@ -357,7 +345,7 @@
     }, 250);
   }
 
-  // أحداث الأزرار
+  // ربط الأحداث (كل الأزرار)
   sendBtn.addEventListener('click', sendMessage);
   inputEl.addEventListener('keydown', (e)=>{
     if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
@@ -406,7 +394,7 @@
     ctx.fillStyle = g; ctx.fillRect(0,0,size,size);
     ctx.fillStyle = '#fff'; ctx.font = `${Math.floor(size*0.18)}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText('YASSER', size/2, size/2);
-    return await new Promise(res=>c.toBlob(res,'image/png') && c.toBlob(b=>res(URL.createObjectURL(b)),'image/png'));
+    return await new Promise(res=>c.toBlob(b=>res(URL.createObjectURL(b)),'image/png'));
   }
 
   async function setupManifest(){
@@ -431,7 +419,7 @@
       link.rel = 'manifest'; link.href = url;
       document.head.appendChild(link);
     }catch(e){
-      // لا مانع إن لم تنجح أيقونة ديناميكية
+      // تجاهل أخطاء الأيقونة الديناميكية
     }
   }
 
@@ -467,7 +455,7 @@
     addBubble("مرحبًا! أنا YASSER BOT. اسألني في أي مجال، واختر الوضع الذي تفضله من الشريط الجانبي.", "bot");
   })();
 
-})();
+}); // DOMContentLoaded
 </script>
 </body>
 </html>
