@@ -243,48 +243,39 @@ document.addEventListener('DOMContentLoaded', ()=>{
   }
 
   function composeReply(question){
-    const {domain, topic} = detectDomainAndTopic(question);
-    const style = styleSelect.value || "مفصل";
-    const intro = TEMPLATES.intro[Math.floor(Math.random()*TEMPLATES.intro.length)];
-    const detail = TEMPLATES.detail[Math.floor(Math.random()*TEMPLATES.detail.length)];
-    const bullet = TEMPLATES.bullet[Math.floor(Math.random()*TEMPLATES.bullet.length)];
-    const closer = TEMPLATES.closer[Math.floor(Math.random()*TEMPLATES.closer.length)];
-    const variant = TEMPLATES.variants[Math.floor(Math.random()*TEMPLATES.variants.length)];
+  const {domain, topic} = detectDomainAndTopic(question);
+  const style = styleSelect.value || "مفصل";
+  const intro = TEMPLATES.intro[Math.floor(Math.random()*TEMPLATES.intro.length)];
+  const detail = TEMPLATES.detail[Math.floor(Math.random()*TEMPLATES.detail.length)];
+  const bullet = TEMPLATES.bullet[Math.floor(Math.random()*TEMPLATES.bullet.length)];
+  const closer = TEMPLATES.closer[Math.floor(Math.random()*TEMPLATES.closer.length)];
+  const variant = TEMPLATES.variants[Math.floor(Math.random()*TEMPLATES.variants.length)];
 
-    // هوية فريدة للرد
-    const id = uniqueId(`${question}|${domain}|${topic}|${style}|${intro}|${detail}|${bullet}|${closer}|${variant}|${sessionCount}`);
+  const id = uniqueId(`${question}|${domain}|${topic}|${style}|${intro}|${detail}|${bullet}|${closer}|${variant}|${Date.now()}`);
 
-    // محتوى آمن للهزار والاختراق
-    if(domain === "هزار"){
-      const body = `${intro}خفة ظل (${variant}):\n${bullet} السيرفر قال "Internal Error"؟ غالبًا محتاج قهوة ☕\n${bullet} لو الـ build نجح من أول مرة: راجع المدخلات بحُب 😅\n${closer}`;
-      return {header:`رد #${id} — ${domain} | ${topic} | ${style}`, text: body};
-    }
-    if(isSensitive(domain, question)){
-      const body = `${intro}${domain}: توعية فقط.\n${bullet} التزم باختبار اختراق قانوني وموافقة مكتوبة.\n${bullet} ركّز على نماذج التهديد، التصحيح، والمراقبة.\n${bullet} استخدم منصات تدريب قانونية.\n${closer}`;
-      return {header:`رد #${id} — ${domain} | ${topic} | ${style}`, text: body};
-    }
+  let extra = "";
+  if(question.toLowerCase().includes("api")) extra = `${bullet} تذكير: الـ API لازم يكون موثق جيدًا.`;
+  if(question.toLowerCase().includes("security")) extra = `${bullet} لا تنسَ مبدأ Least Privilege.`;
 
-    // أساليب مختلفة
-    const pA = `${intro}${domain} — الموضوع: ${topic}. إصدار (${variant}).`;
-    const pB = `${detail}: حدّد الهدف والقيود، اختر الأدوات، جرّب بسرعة، قِس النتائج، وحسّن تدريجيًا.`;
-    const points = [
-      `${bullet} لماذا ${topic}؟ لأنه يحل مشكلة محددة بكفاءة ضمن سياق واضح.`,
-      `${bullet} خطوات عملية: حدّد المدخلات، اعزل التعقيد، اختبر الحدود، راقب الأداء.`,
-      `${bullet} أخطاء شائعة: تجاهل التوثيق، ضعف إدارة الأسرار، تعقيد مبالغ فيه.`,
-      `${bullet} تكامل: اربط ${topic} مع طبقات الخدمة، التخزين المؤقت، والمراقبة.`
-    ];
-    let body = "";
-    if(style === "مختصر"){
-      body = `${pA}\n${closer}`;
-    } else if(style === "مفصل" || style === "تعليمي"){
-      body = `${pA}\n${pB}\n${points.join("\n")}\n${closer}`;
-    } else if(style === "تقني"){
-      body = `${pA}\n${pB}\n${points.slice(0,3).join("\n")}\n${closer}`;
-    } else { // قائمة نقاط
-      body = `${pA}\n${points.join("\n")}\n${closer}`;
-    }
-    return {header:`رد #${id} — ${domain} | ${topic} | ${style}`, text: body};
-  }
+  const pA = `${intro}${domain} — الموضوع: ${topic}. إصدار (${variant}).`;
+  const pB = `${detail}: حدّد الهدف والقيود، اختر الأدوات، جرّب بسرعة، قِس النتائج، وحسّن تدريجيًا.`;
+  const points = [
+    `${bullet} لماذا ${topic}؟ لأنه يحل مشكلة محددة بكفاءة.`,
+    `${bullet} خطوات عملية: حدّد المدخلات، اعزل التعقيد، اختبر الحدود، راقب الأداء.`,
+    `${bullet} أخطاء شائعة: تجاهل التوثيق، ضعف إدارة الأسرار.`,
+    `${bullet} تكامل: اربط ${topic} مع طبقات الخدمة والمراقبة.`,
+    extra
+  ].filter(Boolean);
+
+  let body = "";
+  if(style === "مختصر") body = `${pA}\n${closer}`;
+  else if(style === "مفصل" || style === "تعليمي") body = `${pA}\n${pB}\n${points.join("\n")}\n${closer}`;
+  else if(style === "تقني") body = `${pA}\n${pB}\n${points.slice(0,3).join("\n")}\n${closer}`;
+  else body = `${pA}\n${points.join("\n")}\n${closer}`;
+
+  return {header:`رد #${id} — ${domain} | ${topic} | ${style}`, text: body};
+}
+
 
   function addBubble(text, cls){
     const div = document.createElement('div');
